@@ -96,13 +96,13 @@ public abstract class Utils {
         return sb.toString();
     }
 
-    public static int[] splitIDs(int id){
+    public static int[] splitIDs(int id) {
         int[] array = new int[Integer.bitCount(id)];
-        for(int j = 0; j < array.length; j++){
-            for(int i = 1; i <= 9; i++){
-                if(((id & 0b1 << (i - 1)) >> (i - 1)) == 1){
+        for (int j = 0; j < array.length; j++) {
+            for (int i = 1; i <= 9; i++) {
+                if (((id & 0b1 << (i - 1)) >> (i - 1)) == 1) {
                     array[j] = numberToID(i);
-                    id = id & ~(0b1 << (i-1));
+                    id = id & ~(0b1 << (i - 1));
                     break;
                 }
             }

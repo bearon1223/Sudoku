@@ -138,7 +138,8 @@ public class Cell {
 			if (!binary || !debug)
 				string = String.valueOf(Utils.idToNumber(id).first());
 			font.draw(batch, string, col * size + offsetX,
-					row * size + offsetY + size / 2 + (binary ? smallFont.getCapHeight() / 2 * 2 : font.getCapHeight() / 2),
+					row * size + offsetY + size / 2
+							+ (binary ? smallFont.getCapHeight() / 2 * 2 : font.getCapHeight() / 2),
 					size, 1, true);
 		}
 

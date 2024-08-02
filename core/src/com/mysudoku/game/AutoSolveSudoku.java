@@ -99,7 +99,7 @@ public class AutoSolveSudoku implements Screen {
 			if (Gdx.graphics.getFrameId() % 50 == 0 && !b.isComplete() && !solver.isStuck()) {
 				solver.update(false);
 				solverStepCount++;
-				if(b.isComplete())
+				if (b.isComplete())
 					app.log("Solved in %d steps", solverStepCount);
 			} else if (Gdx.graphics.getFrameId() % 50 == 0) {
 				if (solver.isStuck()) {
@@ -125,7 +125,7 @@ public class AutoSolveSudoku implements Screen {
 			if (!b.isComplete() && !solver.isStuck()) {
 				solver.update(false);
 				solverStepCount++;
-				if(b.isComplete())
+				if (b.isComplete())
 					app.log("Solved in %d steps", solverStepCount);
 			} else {
 				if (solver.isStuck()) {

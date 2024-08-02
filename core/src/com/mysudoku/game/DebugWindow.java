@@ -18,8 +18,8 @@ public class DebugWindow extends Window {
     private float avgTryCount, avgMaxDepth, avgTimeTaken;
     private boolean extra = false;
     private String log = "";
-	private int logOffset = 0;
-	private long holdFrame = 0;
+    private int logOffset = 0;
+    private long holdFrame = 0;
 
     public DebugWindow(Sudoku app) {
         super(app, 800, 10, 300, 400, "Debug Screen");
@@ -33,32 +33,32 @@ public class DebugWindow extends Window {
     @Override
     protected void render() {
         if (!shift) {
-			if (Gdx.input.isKeyJustPressed(Keys.UP)) {
-				logOffset++;
-				holdFrame = Gdx.graphics.getFrameId();
-			} else if (Gdx.input.isKeyJustPressed(Keys.DOWN)) {
-				logOffset--;
-				holdFrame = Gdx.graphics.getFrameId();
-			}
+            if (Gdx.input.isKeyJustPressed(Keys.UP)) {
+                logOffset++;
+                holdFrame = Gdx.graphics.getFrameId();
+            } else if (Gdx.input.isKeyJustPressed(Keys.DOWN)) {
+                logOffset--;
+                holdFrame = Gdx.graphics.getFrameId();
+            }
 
-			if (Gdx.graphics.getFrameId() - holdFrame > 30) {
-				if (Gdx.input.isKeyPressed(Keys.UP)) {
-					logOffset++;
-				} else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
-					logOffset--;
-				}
-			}
-		} else {
-			if (Gdx.input.isKeyJustPressed(Keys.UP)) {
-				logOffset = app.getLogSize();
-			} else if (Gdx.input.isKeyJustPressed(Keys.DOWN)) {
-				logOffset = 0;
-			}
-		}
-		if (logOffset < 0)
-			logOffset = 0;
-		if (logOffset > app.getLogSize() - 16)
-			logOffset = app.getLogSize() - 16;
+            if (Gdx.graphics.getFrameId() - holdFrame > 30) {
+                if (Gdx.input.isKeyPressed(Keys.UP)) {
+                    logOffset++;
+                } else if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+                    logOffset--;
+                }
+            }
+        } else {
+            if (Gdx.input.isKeyJustPressed(Keys.UP)) {
+                logOffset = app.getLogSize();
+            } else if (Gdx.input.isKeyJustPressed(Keys.DOWN)) {
+                logOffset = 0;
+            }
+        }
+        if (logOffset < 0)
+            logOffset = 0;
+        if (logOffset > app.getLogSize() - 16)
+            logOffset = app.getLogSize() - 16;
 
         text(String.format("FPS: %d", Gdx.graphics.getFramesPerSecond()), 10, getHeight() - 10f, 100);
         text(String.format("Depth: %d", depth), 195, 255, 100);
@@ -78,7 +78,7 @@ public class DebugWindow extends Window {
         text("Press \"A\" for averages\nShift Click Candidates for Binary View", 10, getHeight() - 40, 175);
         text("Log:", 10, 280, 180);
         text(log, 12, 260, 175);
-        
+
         depth = (int) s.getValue();
         if (Gdx.input.isKeyJustPressed(Keys.A))
             extra = !extra;
@@ -86,8 +86,8 @@ public class DebugWindow extends Window {
 
     public void update() {
         Sudoku s = app;
-    	if(!isOpen())
-    		return;
+        if (!isOpen())
+            return;
         if (generateButton.clicked(Gdx.input.getX(), Gdx.input.getY())) {
             generatedDepth = depth;
             Generator gen;
@@ -101,13 +101,13 @@ public class DebugWindow extends Window {
         if (!shift && candidatesButton.clicked(Gdx.input.getX(), Gdx.input.getY())) {
             s.showCandidates = !s.showCandidates;
             s.showBinary = false;
-        } else if(candidatesButton.clicked(Gdx.input.getX(), Gdx.input.getY())) {
-        	if(s.showCandidates) {
-        		s.showBinary = !s.showBinary;
-        	} else {
-        		s.showCandidates = true;
-        		s.showBinary = true;
-        	}
+        } else if (candidatesButton.clicked(Gdx.input.getX(), Gdx.input.getY())) {
+            if (s.showCandidates) {
+                s.showBinary = !s.showBinary;
+            } else {
+                s.showCandidates = true;
+                s.showBinary = true;
+            }
         }
 
         if (s.generating) {
@@ -126,7 +126,7 @@ public class DebugWindow extends Window {
         return updateCandidatesButton.clicked(Gdx.input.getX(), Gdx.input.getY());
     }
 
-    public int getDepth(){
+    public int getDepth() {
         generatedDepth = depth;
         return depth;
     }

@@ -290,12 +290,13 @@ public class PlaySudoku implements Screen {
     public void dispose() {
     }
 
-    private boolean heldDown(int Key){
-        if(Gdx.input.isKeyJustPressed(Key)){
+    private boolean heldDown(int Key) {
+        if (Gdx.input.isKeyJustPressed(Key)) {
             startTime = System.currentTimeMillis();
             return true;
         }
-        return System.currentTimeMillis() - startTime > 375f && Gdx.input.isKeyPressed(Key) && Gdx.graphics.getFrameId() % 3 == 0;
+        return System.currentTimeMillis() - startTime > 375f && Gdx.input.isKeyPressed(Key)
+                && Gdx.graphics.getFrameId() % 3 == 0;
     }
 
 }

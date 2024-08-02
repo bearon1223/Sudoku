@@ -8,7 +8,8 @@ public class ButtonPanel {
     public Button[] buttons;
     float x, y, w, h, cx, cy;
 
-    public ButtonPanel(float x, float y, float width, float height, int countX, int countY, float buffer, String[] text) {
+    public ButtonPanel(float x, float y, float width, float height, int countX, int countY, float buffer,
+            String[] text) {
         this.x = x;
         this.y = y;
         this.w = width;
@@ -20,7 +21,7 @@ public class ButtonPanel {
 
         for (int i = 0; i < countX * countY; i++) {
             buttons[i] = new Button(x + ((i % countX) * width), y + (int) (Math.floor(i / countX)) * height,
-            width - buffer, height - buffer, text[countX*countY - 1 -i]);
+                    width - buffer, height - buffer, text[countX * countY - 1 - i]);
         }
     }
 
@@ -36,7 +37,7 @@ public class ButtonPanel {
 
         for (int i = 0; i < countX * countY; i++) {
             buttons[i] = new Button(x + ((i % countX) * width), y + (int) (Math.floor(i / countX)) * height,
-                    width - buffer, height - buffer, String.valueOf(i+1));
+                    width - buffer, height - buffer, String.valueOf(i + 1));
         }
     }
 
@@ -49,8 +50,8 @@ public class ButtonPanel {
         return new Button(-100, -100, 0, 0);
     }
 
-    public Button getButton(int i){
-        if (i > buttons.length){
+    public Button getButton(int i) {
+        if (i > buttons.length) {
             return null;
         }
         return buttons[i];

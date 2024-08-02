@@ -90,11 +90,11 @@ public class Button {
 
 	public void showText(SpriteBatch batch, BitmapFont font) {
 		font.setColor(Color.BLACK);
-		font.draw(batch, t, x, y+ h / 2 + font.getCapHeight()/2, w, Align.center, true);
+		font.draw(batch, t, x, y + h / 2 + font.getCapHeight() / 2, w, Align.center, true);
 	}
 
 	public void showText(Color c, SpriteBatch batch, BitmapFont font, int align) {
 		font.setColor(c);
-		font.draw(batch, t, x + 2, y + h / 2 + font.getCapHeight()/2, w - 4, align, true);
+		font.draw(batch, t, x + 2, y + h / 2 + font.getCapHeight() / 2, w - 4, align, true);
 	}
 }

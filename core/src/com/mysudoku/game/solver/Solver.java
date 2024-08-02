@@ -34,7 +34,7 @@ public class Solver {
         for (Cell c : singleCell) {
             c.setID(c.getCandidates());
             Array<Cell> others2 = b.getAllRelaventCells(c);
-            for(Cell c2 : others2){
+            for (Cell c2 : others2) {
                 c2.setCandidates(c2.getCandidates() & ~c.getID());
             }
         }
@@ -114,7 +114,7 @@ public class Solver {
                 if (Integer.bitCount(candidates) == 1) {
                     c.setID(candidates);
                     Array<Cell> others2 = b.getAllRelaventCells(c);
-                    for(Cell c2 : others2){
+                    for (Cell c2 : others2) {
                         c2.setCandidates(c2.getCandidates() & ~c.getID());
                     }
                 }
@@ -391,14 +391,14 @@ public class Solver {
     public boolean isStuck() {
         return stuck;
     }
-    
+
     public void update(boolean debug) {
         updateCandidates(debug);
         isolatedSingles();
         updateCandidates(debug);
         hiddenSingles();
         updateCandidates(debug);
-        if(Utils.areBoardsTheSame(b.getCellIDs(), previousBoard)){
+        if (Utils.areBoardsTheSame(b.getCellIDs(), previousBoard)) {
             stuck = true;
         } else {
             stuck = false;

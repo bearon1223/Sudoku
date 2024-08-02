@@ -52,7 +52,7 @@ public abstract class Window {
 		textHolder.add(new TextHolder(x, y, w, t));
 	}
 
-	protected void texture(Texture t, float x, float y, float w, float h){
+	protected void texture(Texture t, float x, float y, float w, float h) {
 		textureHolder.add(new TextureHolder(x, y, w, h, t));
 	}
 
@@ -76,12 +76,14 @@ public abstract class Window {
 
 	/**
 	 * Buttons, Dropdown Menus, Sliders, all UIElements are ran here
+	 * 
 	 * @param r
 	 */
 	protected abstract void renderUIElements(ShapeRenderer r);
 
 	/**
 	 * Buttons, Dropdown Menus, Sliders, all UIElements are ran here
+	 * 
 	 * @param batch
 	 * @param font
 	 */
@@ -175,7 +177,7 @@ public abstract class Window {
 		}
 		if (isHidden)
 			return;
-		for (TextureHolder t : textureHolder){
+		for (TextureHolder t : textureHolder) {
 			batch.draw(t.c, t.x, t.y, t.w, t.h);
 		}
 		for (TextHolder t : textHolder) {
@@ -207,7 +209,6 @@ public abstract class Window {
 		return w;
 	}
 
-	
 	/**
 	 * @return window height
 	 */
@@ -215,7 +216,9 @@ public abstract class Window {
 		return h;
 	}
 
-	/** Sets the X location
+	/**
+	 * Sets the X location
+	 * 
 	 * @param x
 	 */
 	public void setX(float x) {
@@ -224,6 +227,7 @@ public abstract class Window {
 
 	/**
 	 * Sets the Y Location
+	 * 
 	 * @param y
 	 */
 	public void setY(float y) {

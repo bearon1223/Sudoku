@@ -78,7 +78,7 @@ public class Generator {
     }
 
     public void generate(int depth) {
-        if (tryCount == 0){
+        if (tryCount == 0) {
             app.generating = true;
         }
         Board newBoard = new Board(this.board.getBoard());
@@ -129,7 +129,7 @@ public class Generator {
             app.maxDepth = depth;
             app.tryCount = tryCount;
             app.timeTaken = System.nanoTime() - startTime;
-            app.log("Generated, time: %3.2f ms", app.timeTaken/1000f/1000f);
+            app.log("Generated, time: %3.2f ms", app.timeTaken / 1000f / 1000f);
         }
     }
 

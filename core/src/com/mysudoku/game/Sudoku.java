@@ -84,22 +84,22 @@ public class Sudoku extends Game {
 
 	public String getLog() {
 		String log = "";
-		for(int i = this.log.size - 15; i < this.log.size; i++) {
-			if(i < 0 | i >= this.log.size)
+		for (int i = this.log.size - 15; i < this.log.size; i++) {
+			if (i < 0 | i >= this.log.size)
 				continue;
 			log += "\n" + this.log.get(i);
 		}
 		return log;
 	}
-	
+
 	public int getLogSize() {
 		return this.log.size;
 	}
-	
+
 	public String getLog(int offset) {
 		String log = "";
-		for(int i = this.log.size - 15 - offset; i < this.log.size - offset; i++) {
-			if(i < 0 | i >= this.log.size)
+		for (int i = this.log.size - 15 - offset; i < this.log.size - offset; i++) {
+			if (i < 0 | i >= this.log.size)
 				continue;
 			log += this.log.get(i) + "\n";
 		}

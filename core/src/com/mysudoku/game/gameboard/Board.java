@@ -14,7 +14,7 @@ public class Board {
     public Board() {
         for (int i = 0; i < 9; i++) { // row
             for (int j = 0; j < 9; j++) { // col
-                int nytBoard = DebugSudokuBoards.generatedBroken[i * 9 + j]; 
+                int nytBoard = DebugSudokuBoards.generatedBroken[i * 9 + j];
                 if (nytBoard != 0)
                     board[i * 9 + j] = new Cell(0b1 << (nytBoard - 1), this, i, j);
                 if (nytBoard == 0) {
@@ -73,10 +73,10 @@ public class Board {
         return relaventCells;
     }
 
-    public int getRemainingCellCount(){
+    public int getRemainingCellCount() {
         int count = 0;
-        for(Cell b : board){
-            if(b.getID() == 0){
+        for (Cell b : board) {
+            if (b.getID() == 0) {
                 count++;
             }
         }

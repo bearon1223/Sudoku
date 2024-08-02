@@ -47,7 +47,8 @@ public class DropdownMenu {
 		} else {
 			menuButtons = new Button[menuLength];
 			for (int i = 0; i < menuButtons.length; i++) {
-				menuButtons[i] = new Button(win, x, y - h + 2 + ItemSize * i, w, ItemSize, buttonNames[i], new Color(0x055da1ff));
+				menuButtons[i] = new Button(win, x, y - h + 2 + ItemSize * i, w, ItemSize, buttonNames[i],
+						new Color(0x055da1ff));
 			}
 		}
 	}
@@ -79,7 +80,7 @@ public class DropdownMenu {
 		r.setColor(new Color(0x257dc1ff));
 		r.rect(x, y, w, 15);
 	}
-	
+
 	public Button getButton(int id) {
 		return menuButtons[id];
 	}
