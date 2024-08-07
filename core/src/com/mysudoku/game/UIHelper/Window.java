@@ -117,19 +117,42 @@ public abstract class Window {
 			isMoving = false;
 		}
 
+		if (x < -w / 2) {
+			x = -w / 2;
+		} else if (x > Gdx.graphics.getWidth() - w / 2) {
+			x = Gdx.graphics.getWidth() - w / 2;
+		}
+
+		if (y < -h) {
+			y = -h;
+		} else if (y > Gdx.graphics.getHeight() - h - 20) {
+			y = Gdx.graphics.getHeight() - h - 20;
+		}
+
 		if (Gdx.input.isButtonJustPressed(0)
 				&& (mouseX > x + w - 20 && mouseX < x + w && mouseY > y + h && mouseY < y + h + 20)) {
 			isVisible = false;
 			System.out.printf("Closing %s\n", windowName);
 		}
 
-		if (Gdx.input.isButtonJustPressed(0) && !isSelected
-				&& (mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h + 20) && isVisible) {
-			isSelected = true;
-		}
-		if (Gdx.input.isButtonJustPressed(0) && isSelected && !isMoving && isVisible
-				&& !(mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h + 20)) {
-			isSelected = false;
+		if (!isHidden) {
+			if (Gdx.input.isButtonJustPressed(0) && !isSelected
+					&& (mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h + 20) && isVisible) {
+				isSelected = true;
+			}
+			if (Gdx.input.isButtonJustPressed(0) && isSelected && !isMoving && isVisible
+					&& !(mouseX > x && mouseX < x + w && mouseY > y && mouseY < y + h + 20)) {
+				isSelected = false;
+			}
+		} else {
+			if (Gdx.input.isButtonJustPressed(0) && !isSelected
+					&& (mouseX > x && mouseX < x + w && mouseY > y + h && mouseY < y + h + 20) && isVisible) {
+				isSelected = true;
+			}
+			if (Gdx.input.isButtonJustPressed(0) && isSelected && !isMoving && isVisible
+					&& !(mouseX > x && mouseX < x + w && mouseY > y + h && mouseY < y + h + 20)) {
+				isSelected = false;
+			}
 		}
 		if (Gdx.input.isKeyJustPressed(Keys.SHIFT_LEFT) || Gdx.input.isKeyJustPressed(Keys.SHIFT_RIGHT)) {
 			shift = true;

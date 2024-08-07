@@ -244,6 +244,12 @@ public class Board {
         return null;
     }
 
+    public float getSize() {
+        int width = Gdx.graphics.getWidth();
+        int height = Gdx.graphics.getHeight();
+        return Math.min((width - 100f) / 9f, (height - 100f) / 9f);
+    }
+
     public void clearAllCandidates() {
         for (Cell c : board) {
             c.clearCandidates();

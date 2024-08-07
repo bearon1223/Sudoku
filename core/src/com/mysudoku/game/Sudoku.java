@@ -71,7 +71,7 @@ public class Sudoku extends Game {
 		if (Gdx.input.isKeyJustPressed(Keys.D)) {
 			debugScreen.reOpen();
 		}
-		if (Gdx.input.isKeyJustPressed(Keys.C)) {
+		if (Gdx.input.isKeyJustPressed(Keys.C) && Gdx.input.isKeyPressed(Keys.SHIFT_LEFT)) {
 			this.log.clear();
 			log("Log Cleared");
 		}

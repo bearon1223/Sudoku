@@ -6,7 +6,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class ButtonPanel {
     public Button[] buttons;
-    float x, y, w, h, cx, cy;
+    float x, y, w, h;
+    int cx, cy;
 
     public ButtonPanel(float x, float y, float width, float height, int countX, int countY, float buffer,
             String[] text) {
@@ -55,6 +56,20 @@ public class ButtonPanel {
             return null;
         }
         return buttons[i];
+    }
+
+    public void setSize(float width, float height) {
+        for (Button b : buttons) {
+            b.setSize(width - 2, height - 2);
+        }
+    }
+
+    public void setLocation(float x, float y) {
+        int countX = cx;
+        int countY = cy;
+        for (int i = 0; i < countX * countY; i++) {
+            buttons[i].setLocation(x + ((i % countX) * (buttons[i].getWidth() + 2)), y + (int) (Math.floor(i / countX)) * (buttons[i].getHeight() + 2));
+        }
     }
 
     public void draw(ShapeRenderer renderer) {

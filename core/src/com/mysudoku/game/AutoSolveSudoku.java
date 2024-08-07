@@ -43,12 +43,12 @@ public class AutoSolveSudoku implements Screen {
 		menuPanel = new ButtonPanel(850 + 700 / 9f, 752 - 700 / 9f * 2f, 700 / 3f, 700 / 9f, 1, 2, 2, names);
 	}
 
-	public AutoSolveSudoku(Sudoku app, Board b) {
+	public AutoSolveSudoku(Sudoku app, Board b, int[] solution) {
 		this.b = b;
 		originalBoard = b.getCellIDs();
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false);
-		solution = b.getCellIDs();
+		this.solution = solution;
 		solver = new Solver(b);
 		this.app = app;
 
@@ -65,6 +65,13 @@ public class AutoSolveSudoku implements Screen {
 
 	@Override
 	public void render(float delta) {
+        int width = Gdx.graphics.getWidth();
+        int height = Gdx.graphics.getHeight();
+        float size = Math.min((width - 100f) / 9f, (height - 100f) / 9f);
+        float offsetY = height / 2 - size * 4.5f;
+
+        menuPanel.setSize(700 / 3f * width / 1200, b.getSize());
+        menuPanel.setLocation((850 + 700 / 9f) * width / 1200, offsetY + 2 + b.getSize() * 7);
 		ScreenUtils.clear(Color.BLACK, true);
 		debug = app.showCandidates;
 		binary = app.showBinary;
@@ -203,6 +210,7 @@ public class AutoSolveSudoku implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
+		camera.setToOrtho(false, width, height);
 	}
 
 	@Override

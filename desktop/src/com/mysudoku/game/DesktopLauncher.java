@@ -11,7 +11,8 @@ public class DesktopLauncher {
 		config.setForegroundFPS(60);
 		config.setTitle("Sudoku");
 		config.setWindowedMode(1200, 800);
-		config.setResizable(false);
+		config.setResizable(true);
+		config.setWindowIcon("icon.png", "icon Small.png");
 		new Lwjgl3Application(new Sudoku(), config);
 	}
 }

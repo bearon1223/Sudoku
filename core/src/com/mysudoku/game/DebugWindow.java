@@ -93,7 +93,7 @@ public class DebugWindow extends Window {
             Generator gen;
             gen = new Generator(true, s);
             gen.generate(generatedDepth);
-            s.setScreen(new AutoSolveSudoku(s, gen.getBoard()));
+            s.setScreen(new AutoSolveSudoku(s, gen.getBoard(), gen.getSolution()));
         }
 
         s.stepSolver = solveButton.clicked(Gdx.input.getX(), Gdx.input.getY());

@@ -38,7 +38,7 @@ public class Generator {
     public Generator(boolean debug, Sudoku app) {
         SolutionGenerator gen = new SolutionGenerator();
         this.solution = DebugSudokuBoards.convertToIDs(gen.generate_sudoku());
-        board = new Board(solution);
+        board = new Board(solution.clone());
         remainingIndicies = new int[81];
         yetToBeTestedIndicies = new int[81];
         for (int i = 0; i < 81; i++) {

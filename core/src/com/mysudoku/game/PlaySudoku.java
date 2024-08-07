@@ -51,6 +51,18 @@ public class PlaySudoku implements Screen {
 
     @Override
     public void render(float delta) {
+        int width = Gdx.graphics.getWidth();
+        int height = Gdx.graphics.getHeight();
+        float size = Math.min((width - 100f) / 9f, (height - 100f) / 9f);
+        float offsetX = 50f;
+        float offsetY = height / 2 - size * 4.5f;
+
+        numberPanel.setSize(b.getSize(), b.getSize());
+        numberPanel.setLocation(2 * offsetX + size*9, offsetY + 2);
+
+        settingsPanel.setSize(700 / 3f * width / 1200, b.getSize());
+        settingsPanel.setLocation((850 + 700 / 9f) * width / 1200, offsetY + 2 + b.getSize() * 7);
+
         ScreenUtils.clear(Color.BLACK);
         camera.update();
         app.renderer.setProjectionMatrix(camera.combined);
@@ -153,7 +165,7 @@ public class PlaySudoku implements Screen {
                 c2.setSelected(false);
                 c2.setSelected2(false);
             }
-            app.setScreen(new AutoSolveSudoku(app, new Board(originalBoard)));
+            app.setScreen(new AutoSolveSudoku(app, new Board(originalBoard), this.solution));
         }
 
         int mouseX = Gdx.input.getX();

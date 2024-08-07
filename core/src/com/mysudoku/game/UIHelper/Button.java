@@ -88,6 +88,24 @@ public class Button {
 		this.t = t;
 	}
 
+	public void setSize(float width, float height) {
+		this.w = width;
+		this.h = height;
+	}
+
+	public float getWidth() {
+		return this.w;
+	}
+
+	public float getHeight() {
+		return this.h;
+	}
+
+	public void setLocation(float x, float y){
+		this.x = x;
+		this.y = y;
+	}
+
 	public void showText(SpriteBatch batch, BitmapFont font) {
 		font.setColor(Color.BLACK);
 		font.draw(batch, t, x, y + h / 2 + font.getCapHeight() / 2, w, Align.center, true);
