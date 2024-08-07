@@ -20,14 +20,17 @@ public class DebugWindow extends Window {
     private String log = "";
     private int logOffset = 0;
     private long holdFrame = 0;
+    private boolean generating = false;
+    Generator gen;
 
     public DebugWindow(Sudoku app) {
-        super(app, 800, 10, 300, 400, "Debug Screen");
-        generateButton = new Button(this, 195, 5, 100, 50, "Generate");
-        solveButton = new Button(this, 195, 60, 100, 50, "Update");
-        updateCandidatesButton = new Button(this, 195, 115, 100, 50, "Candidates Only");
-        candidatesButton = new Button(this, 195, 170, 100, 50, "Candidates");
-        s = new Slider(this, 195, 230, 100, 10, 0, 81, 81, "");
+        super(app, 800, 10, 350, 400, "Debug Screen");
+        generateButton = new Button(this, 205, 5, 140, 50, "Generate");
+        solveButton = new Button(this, 205, 60, 140, 50, "Update");
+        updateCandidatesButton = new Button(this, 205, 115, 140, 50, "Candidates Only");
+        candidatesButton = new Button(this, 205, 170, 140, 50, "Candidates");
+        s = new Slider(this, 205, 230, 140, 10, 0, 81, 81, "");
+        gen = new Generator(true, app);
     }
 
     @Override
@@ -67,17 +70,17 @@ public class DebugWindow extends Window {
             text(String.format(
                     "Generator Info:\n  Cells Removed: %d\n       avg: %3.2f\n  Tries: %d\n       avg: %3.2f\n  Time Taken : %d ms\n       avg: %3.2f ms",
                     generatedDepth - maxDepth, (avgMaxDepth / total), tryCount, (avgTryCount / total),
-                    timeTaken / 1000 / 1000, (avgTimeTaken / total)), 165, getHeight() - 10, 180);
+                    timeTaken / 1000 / 1000, (avgTimeTaken / total)), 205, getHeight() - 10, 180);
         } else {
             text(String.format(
                     "Generator Info:\n  Cells Removed: %d\n  Tries: %d\n  Time Taken : %d ms",
                     generatedDepth - maxDepth, tryCount, timeTaken / 1000 / 1000),
-                    165, getHeight() - 10, 180);
+                    205, getHeight() - 10, 180);
         }
 
-        text("Press \"A\" for averages\nShift Click Candidates for Binary View", 10, getHeight() - 40, 175);
+        text("Press \"A\" for averages\nShift Click Candidates for Binary View.\nShift + S will conduct a stress test", 10, getHeight() - 35, 205);
         text("Log:", 10, 280, 180);
-        text(log, 12, 260, 175);
+        text(log, 12, 260, 205);
 
         depth = (int) s.getValue();
         if (Gdx.input.isKeyJustPressed(Keys.A))
@@ -88,12 +91,18 @@ public class DebugWindow extends Window {
         Sudoku s = app;
         if (!isOpen())
             return;
-        if (generateButton.clicked(Gdx.input.getX(), Gdx.input.getY())) {
+        if (generateButton.clicked(Gdx.input.getX(), Gdx.input.getY()) && !generating) {
             generatedDepth = depth;
-            Generator gen;
-            gen = new Generator(true, s);
-            gen.generate(generatedDepth);
+            gen.generateAsync(generatedDepth);
+            generating = true;
+        }
+
+        // When the asynchronous generation is done, update everything
+        if (gen.isBoardReady() && generating) {
             s.setScreen(new AutoSolveSudoku(s, gen.getBoard(), gen.getSolution()));
+            gen = new Generator(true, s);
+            generating = false;
+            updateAverageData(s.maxDepth, s.tryCount, s.timeTaken);
         }
 
         s.stepSolver = solveButton.clicked(Gdx.input.getX(), Gdx.input.getY());
@@ -109,16 +118,6 @@ public class DebugWindow extends Window {
                 s.showBinary = true;
             }
         }
-
-        if (s.generating) {
-            maxDepth = s.maxDepth;
-            tryCount = s.tryCount;
-            timeTaken = s.timeTaken;
-            avgMaxDepth += generatedDepth - maxDepth;
-            avgTryCount += tryCount;
-            avgTimeTaken += Math.round(timeTaken / 1000 / 1000);
-            total++;
-        }
         log = s.getLog(logOffset);
     }
 
@@ -129,6 +128,16 @@ public class DebugWindow extends Window {
     public int getDepth() {
         generatedDepth = depth;
         return depth;
+    }
+
+    public void updateAverageData(int maxDepth, int tryCount, long timeTaken) {
+        this.maxDepth = maxDepth;
+        this.tryCount = tryCount;
+        this.timeTaken = timeTaken;
+        avgMaxDepth += generatedDepth - maxDepth;
+        avgTryCount += tryCount;
+        avgTimeTaken += Math.round(timeTaken / 1000 / 1000);
+        total++;
     }
 
     @Override
@@ -146,5 +155,9 @@ public class DebugWindow extends Window {
         solveButton.showText(batch, font);
         candidatesButton.showText(batch, font);
         updateCandidatesButton.showText(batch, font);
+    }
+
+    public void shutdown() {
+        gen.shutdown();
     }
 }

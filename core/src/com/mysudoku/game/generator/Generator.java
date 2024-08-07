@@ -1,6 +1,8 @@
 package com.mysudoku.game.generator;
 
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.utils.async.AsyncExecutor;
+import com.badlogic.gdx.utils.async.AsyncResult;
 import com.mysudoku.game.Sudoku;
 import com.mysudoku.game.Utils;
 import com.mysudoku.game.gameboard.Board;
@@ -18,6 +20,8 @@ public class Generator {
     private int maxDepth = 0;
     private long startTime;
     private final Sudoku app;
+    private AsyncExecutor executor;
+    private AsyncResult<Void> futureTask;
 
     public Generator(int[] intendedSolution, boolean debug, Sudoku app) {
         this.solution = DebugSudokuBoards.convertToIDs(intendedSolution);
@@ -33,6 +37,7 @@ public class Generator {
         this.app = app;
         app.log("Generator Setup Complete");
         startTime = System.nanoTime();
+        this.executor = new AsyncExecutor(1); // Single-threaded executor
     }
 
     public Generator(boolean debug, Sudoku app) {
@@ -51,6 +56,7 @@ public class Generator {
         this.app = app;
         app.log("Generator Setup Complete");
         startTime = System.nanoTime();
+        this.executor = new AsyncExecutor(1); // Single-threaded executor
     }
 
     public int getMaxDepth() {
@@ -77,7 +83,17 @@ public class Generator {
         return solution;
     }
 
-    public void generate(int depth) {
+    public void generateAsync(int depth){
+        if(futureTask == null || futureTask.isDone()){
+            startTime = System.nanoTime();
+            futureTask = executor.submit(() -> {
+                generateSudoku(depth);
+                return null;
+            });
+        }
+    }
+
+    public void generateSudoku(int depth) {
         if (tryCount == 0) {
             app.generating = true;
         }
@@ -114,10 +130,10 @@ public class Generator {
                 for (int i = 0; i < remainingIndicies.length; i++) {
                     yetToBeTestedIndicies[i] = i;
                 }
-                generate(depth - 1);
+                generateSudoku(depth - 1);
             } else {
                 yetToBeTestedIndicies = removeIndex(yetToBeTestedIndicies, index);
-                generate(depth);
+                generateSudoku(depth);
             }
         } else {
             for (Cell c : this.board.getBoard()) {
@@ -135,6 +151,14 @@ public class Generator {
 
     private boolean areBoardsTheSame(int[] a, int[] b) {
         return Utils.areBoardsTheSame(a, b);
+    }
+
+    public boolean isBoardReady() {
+        return futureTask != null && futureTask.isDone();
+    }
+
+    public void shutdown() {
+        executor.dispose();
     }
 
     public Board getBoard() {

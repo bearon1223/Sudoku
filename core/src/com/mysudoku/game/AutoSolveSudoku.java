@@ -23,6 +23,8 @@ public class AutoSolveSudoku implements Screen {
 	private boolean debug = false, binary = false, shift = false, idle = false, stress = false;
 	private ButtonPanel menuPanel;
 	private int solverStepCount = 0;
+	private boolean generating = false;
+	Generator gen;
 
 	public AutoSolveSudoku(Sudoku app) {
 		b = new Board();
@@ -41,6 +43,7 @@ public class AutoSolveSudoku implements Screen {
 		solver.updateCandidates(false);
 		String[] names = { "Play Sudoku", "Idle Mode" };
 		menuPanel = new ButtonPanel(850 + 700 / 9f, 752 - 700 / 9f * 2f, 700 / 3f, 700 / 9f, 1, 2, 2, names);
+		gen = new Generator(debug, app);
 	}
 
 	public AutoSolveSudoku(Sudoku app, Board b, int[] solution) {
@@ -57,6 +60,7 @@ public class AutoSolveSudoku implements Screen {
 		}
 		String[] names = { "Play Sudoku", "Idle Mode" };
 		menuPanel = new ButtonPanel(850 + 700 / 9f, 752 - 700 / 9f * 2f, 700 / 3f, 700 / 9f, 1, 2, 2, names);
+		gen = new Generator(debug, app);
 	}
 
 	@Override
@@ -65,13 +69,13 @@ public class AutoSolveSudoku implements Screen {
 
 	@Override
 	public void render(float delta) {
-        int width = Gdx.graphics.getWidth();
-        int height = Gdx.graphics.getHeight();
-        float size = Math.min((width - 100f) / 9f, (height - 100f) / 9f);
-        float offsetY = height / 2 - size * 4.5f;
+		int width = Gdx.graphics.getWidth();
+		int height = Gdx.graphics.getHeight();
+		float size = Math.min((width - 100f) / 9f, (height - 100f) / 9f);
+		float offsetY = height / 2 - size * 4.5f;
 
-        menuPanel.setSize(700 / 3f * width / 1200, b.getSize());
-        menuPanel.setLocation((850 + 700 / 9f) * width / 1200, offsetY + 2 + b.getSize() * 7);
+		menuPanel.setSize(700 / 3f * width / 1200, b.getSize());
+		menuPanel.setLocation((850 + 700 / 9f) * width / 1200, offsetY + 2 + b.getSize() * 7);
 		ScreenUtils.clear(Color.BLACK, true);
 		debug = app.showCandidates;
 		binary = app.showBinary;
@@ -114,15 +118,12 @@ public class AutoSolveSudoku implements Screen {
 					Utils.printArray("\nBoard: ", Utils.idArraytoIntArray(b.getCellIDs()), 9);
 					Utils.printArray("\nSolution: ", Utils.idArraytoIntArray(solution), 9);
 				}
-				Generator gen;
-				gen = new Generator(debug, app);
-				gen.generate(app.debugScreen.getDepth());
-				solution = gen.getSolution();
-				this.b = gen.getBoard();
-				originalBoard = b.getCellIDs();
-				solver = new Solver(b);
-				solver.updateCandidates(false);
-				solverStepCount = 0;
+
+				if (!generating) {
+					// start generating in a new thread
+					gen.generateAsync(app.debugScreen.getDepth());
+					generating = true;
+				}
 			}
 			if (Gdx.input.isKeyJustPressed(Keys.P)) {
 				b.print();
@@ -142,18 +143,25 @@ public class AutoSolveSudoku implements Screen {
 					Utils.printArray("\nSolution: ", Utils.idArraytoIntArray(solution), 9);
 					stress = false;
 
-				} else {
-					Generator gen;
-					gen = new Generator(debug, app);
-					gen.generate(81);
-					solution = gen.getSolution();
-					this.b = gen.getBoard();
-					originalBoard = b.getCellIDs();
-					solver = new Solver(b);
-					solver.updateCandidates(false);
-					solverStepCount = 0;
+				} else if (!generating) {
+					// start generating in a new thread
+					gen.generateAsync(81);
+					generating = true;
 				}
 			}
+		}
+
+		// When the asynchronous generation is done, update everything
+		if (gen.isBoardReady() && generating) {
+			solution = gen.getSolution();
+			this.b = gen.getBoard();
+			originalBoard = b.getCellIDs();
+			solver = new Solver(b);
+			solver.updateCandidates(false);
+			solverStepCount = 0;
+			gen = new Generator(debug, app);
+			generating = false;
+			app.debugScreen.updateAverageData(app.maxDepth, app.tryCount, app.timeTaken);
 		}
 
 		// switch screens

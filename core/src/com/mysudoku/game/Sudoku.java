@@ -113,5 +113,6 @@ public class Sudoku extends Game {
 		font.dispose();
 		fontD.dispose();
 		NumberFont.dispose();
+		debugScreen.shutdown();
 	}
 }
