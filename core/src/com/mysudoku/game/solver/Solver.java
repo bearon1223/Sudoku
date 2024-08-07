@@ -21,27 +21,21 @@ public class Solver {
 
     public void isolatedSingles() {
         // find Naked Singles
-        Array<Cell> singleCell = new Array<>();
         for (int i = 0; i < b.getBoard().length; i++) {
             if (b.getBoard()[i].getID() == 0) {
                 if (Integer.bitCount(b.getBoard()[i].getCandidates()) == 1) {
-                    singleCell.add(b.getBoard()[i]);
+                    // set the value to cell to the single candidate
+                    Cell c = b.getBoard()[i];
+                    c.setID(c.getCandidates());
+                    for(Cell c2 : b.getAllRelaventCells(c)){
+                        c2.setCandidates(c2.getCandidates() & ~c.getID());
+                    }
                 }
-            }
-        }
-
-        // Set all the found singles to the known value
-        for (Cell c : singleCell) {
-            c.setID(c.getCandidates());
-            Array<Cell> others2 = b.getAllRelaventCells(c);
-            for (Cell c2 : others2) {
-                c2.setCandidates(c2.getCandidates() & ~c.getID());
             }
         }
     }
 
     public void isolatedDoubles() {
-        // pointing();
         Array<Cell> cellsToBeChecked = new Array<>();
         // Gather all cells with exactly 2 candidates
         for (Cell c : b.getBoard()) {
@@ -108,8 +102,7 @@ public class Solver {
                     // If when you remove all the c2 candidates from c and you end up with only 1
                     // number, use it
                     if (c2 != c)
-                        candidates = candidates & ~(c2.getCandidates()); // 010100001 & ~(010100010) = 010100001 &
-                                                                         // 101011101 = 0000000001
+                        candidates = candidates & ~(c2.getCandidates());
                 }
                 if (Integer.bitCount(candidates) == 1) {
                     c.setID(candidates);

@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.mysudoku.game.UIHelper.ButtonPanel;
 import com.mysudoku.game.gameboard.Board;
@@ -93,6 +94,10 @@ public class AutoSolveSudoku implements Screen {
 		app.NumberFont.setColor(Color.BLACK);
 		b.drawText(app.batch, binary ? app.fontD : app.NumberFont, app.fontD, debug, binary);
 		menuPanel.drawText(app.batch, app.font);
+		if (generating) {
+			app.NumberFont.setColor(Color.RED);
+			app.NumberFont.draw(app.batch, "Generating...", 50, app.NumberFont.getLineHeight() - 5);
+		}
 		app.batch.end();
 
 		// Check inputs

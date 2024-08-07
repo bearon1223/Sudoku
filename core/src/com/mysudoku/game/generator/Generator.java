@@ -22,6 +22,7 @@ public class Generator {
     private final Sudoku app;
     private AsyncExecutor executor;
     private AsyncResult<Void> futureTask;
+    private int threads = 1;
 
     public Generator(int[] intendedSolution, boolean debug, Sudoku app) {
         this.solution = DebugSudokuBoards.convertToIDs(intendedSolution);
@@ -37,7 +38,7 @@ public class Generator {
         this.app = app;
         app.log("Generator Setup Complete");
         startTime = System.nanoTime();
-        this.executor = new AsyncExecutor(1); // Single-threaded executor
+        this.executor = new AsyncExecutor(threads); // Single-threaded executor
     }
 
     public Generator(boolean debug, Sudoku app) {
@@ -56,7 +57,7 @@ public class Generator {
         this.app = app;
         app.log("Generator Setup Complete");
         startTime = System.nanoTime();
-        this.executor = new AsyncExecutor(1); // Single-threaded executor
+        this.executor = new AsyncExecutor(threads); // Single-threaded executor
     }
 
     public int getMaxDepth() {
